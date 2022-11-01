@@ -9,7 +9,7 @@ class APIException(Exception):
 
 class CryptoConverter:
     @staticmethod
-    def get_price(base: str, quote: str, amount: float):
+    def get_price(base: str, quote: str, amount:str):
         base=base.lower()
         quote=quote.lower()
         if quote == base and (base  in keys or quote  in keys) :
@@ -35,6 +35,10 @@ class CryptoConverter:
 
         if  amount < 0:
             raise APIException('Введите положительное число')
+
+        if amount == float('inf'):
+            raise APIException('Вы ввели слишком длинное число')
+
 
         r = requests.get(f'https://min-api.cryptocompare.com/data/price?fsym={quote_ticker}&tsyms={base_ticker}')
         total_base = json.loads(r.content)[keys[base]]
